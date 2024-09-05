@@ -227,7 +227,7 @@ function getRollupOutputOptions(
     freeze: !isProduction,
     interop: getRollupInteropValue,
     name: globalName,
-    sourcemap: false,
+    sourcemap: true,
     esModule: false,
     exports: 'auto',
   };
@@ -694,6 +694,7 @@ async function createBundle(bundle, bundleType) {
       freeze: false,
       interop: getRollupInteropValue,
       esModule: false,
+      sourcemap: 'inline',
     },
   };
   const mainOutputPath = Packaging.getBundleOutputPath(
