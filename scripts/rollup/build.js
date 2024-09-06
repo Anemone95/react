@@ -150,7 +150,7 @@ function getBabelConfig(
     presets: [],
     plugins: [...babelPlugins],
     babelHelpers: 'bundled',
-    sourcemap: false,
+    sourcemap: 'inline',
   };
   if (isDevelopment) {
     options.plugins.push(...babelToES5Plugins);
@@ -413,12 +413,12 @@ function getPlugins(
         )
       ),
       // Remove 'use strict' from individual source files.
-      {
-        name: "remove 'use strict'",
-        transform(source) {
-          return source.replace(/['"]use strict["']/g, '');
-        },
-      },
+      // {
+      //   name: "remove 'use strict'",
+      //   transform(source) {
+      //     return source.replace(/['"]use strict["']/g, '');
+      //   },
+      // },
       // Turn __DEV__ and process.env checks into constants.
       replace({
         preventAssignment: true,
@@ -431,19 +431,19 @@ function getPlugins(
           __EXPERIMENTAL__,
         },
       }),
-      {
-        name: 'top-level-definitions',
-        renderChunk(source) {
-          return Wrappers.wrapWithTopLevelDefinitions(
-            source,
-            bundleType,
-            globalName,
-            filename,
-            moduleType,
-            bundle.wrapWithModuleBoundaries
-          );
-        },
-      },
+      // {
+      //   name: 'top-level-definitions',
+      //   renderChunk(source) {
+      //     return Wrappers.wrapWithTopLevelDefinitions(
+      //       source,
+      //       bundleType,
+      //       globalName,
+      //       filename,
+      //       moduleType,
+      //       bundle.wrapWithModuleBoundaries
+      //     );
+      //   },
+      // },
       // For production builds, compile with Closure. We do this even for the
       // "non-minified" production builds because Closure is much better at
       // minification than what most applications use. During this step, we do
@@ -694,7 +694,7 @@ async function createBundle(bundle, bundleType) {
       freeze: false,
       interop: getRollupInteropValue,
       esModule: false,
-      sourcemap: 'inline',
+      sourcemap: true,
     },
   };
   const mainOutputPath = Packaging.getBundleOutputPath(
