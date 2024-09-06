@@ -227,7 +227,7 @@ function getRollupOutputOptions(
     freeze: !isProduction,
     interop: getRollupInteropValue,
     name: globalName,
-    sourcemap: true,
+    sourcemap: 'inline',
     esModule: false,
     exports: 'auto',
   };
@@ -495,36 +495,36 @@ function getPlugins(
           trailingComma: 'none',
           bracketSpacing: true,
         }),
-      {
-        name: 'license-and-signature-header',
-        renderChunk(source) {
-          return Wrappers.wrapWithLicenseHeader(
-            source,
-            bundleType,
-            globalName,
-            filename,
-            moduleType
-          );
-        },
-      },
+      // {
+      //   name: 'license-and-signature-header',
+      //   renderChunk(source) {
+      //     return Wrappers.wrapWithLicenseHeader(
+      //       source,
+      //       bundleType,
+      //       globalName,
+      //       filename,
+      //       moduleType
+      //     );
+      //   },
+      // },
       // Record bundle size.
-      sizes({
-        getSize: (size, gzip) => {
-          const currentSizes = Stats.currentBuildResults.bundleSizes;
-          const recordIndex = currentSizes.findIndex(
-            record =>
-              record.filename === filename && record.bundleType === bundleType
-          );
-          const index = recordIndex !== -1 ? recordIndex : currentSizes.length;
-          currentSizes[index] = {
-            filename,
-            bundleType,
-            packageName,
-            size,
-            gzip,
-          };
-        },
-      }),
+      // sizes({
+      //   getSize: (size, gzip) => {
+      //     const currentSizes = Stats.currentBuildResults.bundleSizes;
+      //     const recordIndex = currentSizes.findIndex(
+      //       record =>
+      //         record.filename === filename && record.bundleType === bundleType
+      //     );
+      //     const index = recordIndex !== -1 ? recordIndex : currentSizes.length;
+      //     currentSizes[index] = {
+      //       filename,
+      //       bundleType,
+      //       packageName,
+      //       size,
+      //       gzip,
+      //     };
+      //   },
+      // }),
     ].filter(Boolean);
   } catch (error) {
     console.error(

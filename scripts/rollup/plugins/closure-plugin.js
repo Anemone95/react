@@ -24,18 +24,33 @@ module.exports = function closure(flags = {}) {
     name: 'scripts/rollup/plugins/closure-plugin',
     async renderChunk(code, chunk, options) {
       const inputFile = tmp.fileSync();
-
+      const sourceMap = tmp.fileSync();
       // Tell Closure what JS source file to read, and optionally what sourcemap file to write
       const finalFlags = {
         ...flags,
         js: inputFile.name,
+        createSourceMap: sourceMap.name,
       };
 
       await writeFileAsync(inputFile.name, code, 'utf8');
       const compiledCode = await compile(finalFlags);
 
       inputFile.removeCallback();
-      return {code: compiledCode};
+
+      let s = '';
+      const stats = fs.fstatSync(sourceMap.fd);
+      const fileSize = stats.size;
+      const buffer = Buffer.alloc(fileSize);
+
+      try {
+        fs.readSync(sourceMap.fd, buffer, 0, fileSize, 0);
+        s=buffer.toString('utf8');
+      } catch (err) {
+      } finally {
+        sourceMap.removeCallback();
+      }
+
+      return {code: compiledCode, map: s};
     },
   };
 };
