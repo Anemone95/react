@@ -378,14 +378,14 @@ function getPlugins(
 
     return [
       // Keep dynamic imports as externals
-      dynamicImports(),
+      // dynamicImports(),
       {
         name: 'rollup-plugin-flow-remove-types',
         transform(code) {
           const transformed = flowRemoveTypes(code);
           return {
             code: transformed.toString(),
-            map: null,
+            map: null// FIXME: why transformed.generateMap() doesn't work?
           };
         },
       },
@@ -420,17 +420,17 @@ function getPlugins(
       //   },
       // },
       // Turn __DEV__ and process.env checks into constants.
-      replace({
-        preventAssignment: true,
-        values: {
-          __DEV__: isProduction ? 'false' : 'true',
-          __PROFILE__: isProfiling || !isProduction ? 'true' : 'false',
-          'process.env.NODE_ENV': isProduction
-            ? "'production'"
-            : "'development'",
-          __EXPERIMENTAL__,
-        },
-      }),
+      // replace({
+      //   preventAssignment: true,
+      //   values: {
+      //     __DEV__: isProduction ? 'false' : 'true',
+      //     __PROFILE__: isProfiling || !isProduction ? 'true' : 'false',
+      //     'process.env.NODE_ENV': isProduction
+      //       ? "'production'"
+      //       : "'development'",
+      //     __EXPERIMENTAL__,
+      //   },
+      // }),
       // {
       //   name: 'top-level-definitions',
       //   renderChunk(source) {
